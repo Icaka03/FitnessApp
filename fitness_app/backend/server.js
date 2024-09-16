@@ -19,3 +19,35 @@ let db = new sqlite3.Database("fitness.db", (err) => {
 });
 
 app.listen(3001, () => console.log("Listening at port 3001"));
+
+db.run(
+  `CREATE TABLE IF NOT EXISTS Credentials (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL, email TEXTbNOT NULL, Password TEXT NOT NULL)`,
+  (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("created Credentials database or already exists");
+    }
+  }
+);
+
+app.get("/fetchCredentials", (req, res) => {
+  db.all("SELECT * FROM Credentials", [], (err, rows) => {
+    if (err) {
+      console.log(err);
+    }
+
+    res.json({ data: rows });
+  });
+});
+
+// db.serialize(() => {
+//   db.all("SELECT * FROM Credentials", (err, rows) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log("Data from Credentials");
+//       console.log(rows);
+//     }
+//   });
+// });
